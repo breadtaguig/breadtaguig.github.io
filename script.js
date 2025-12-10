@@ -73,7 +73,41 @@ function generateMessage() {
 👥 𝗪𝗵𝗼: ${who}
 📝 𝗡𝗼𝘁𝗲𝘀:
 ${notes}
+
 ${poster ? `🖼️ 𝗣𝗼𝘀𝘁𝗲𝗿: ${poster}` : ""}${gmaps ? `\n🌍 𝗚𝗼𝗼𝗴𝗹𝗲 𝗠𝗮𝗽𝘀: ${gmaps}` : ""}${cc ? `𝗖𝗖 :\n${cc}` : ""}`;
+
+  document.getElementById("output").value = msg;
+}
+
+function generateBSMessage() {
+  //const group = toSansBold(sanitizeInput(document.getElementById("group").value));
+  const chapdist = sanitizeInput(document.getElementById("chapdist").value);
+  const bsdate = toReadableDate(document.getElementById("bsdate").value);
+  const timestart = sanitizeInput(document.getElementById("time-start").value);
+  const timeend = sanitizeInput(document.getElementById("time-end").value);
+  const bsvenue = sanitizeInput(document.getElementById("bsvenue").value);
+  const landmark = sanitizeInput(document.getElementById("landmark").value);
+  const contactper = sanitizeInput(document.getElementById("contact-per").value);
+  const contactnum = sanitizeInput(document.getElementById("contact-num").value);
+  const numguest = sanitizeInput(document.getElementById("numguest").value);
+  const nummcgi = sanitizeInput(document.getElementById("nummcgi").value);
+  const topic = sanitizeInput(document.getElementById("topic").value);
+  const spnotes = sanitizeInput(document.getElementById("spnotes").value);
+
+  const msg = `BS Request Format
+Chapter/Dist: ${chapdist || "MCGI Bible Readers"}
+Date: ${bsdate}
+Time Start: ${timestart}
+Time End: ${timeend}
+Venue: ${bsvenue}
+Landmark: ${landmark}
+Contact Person: ${contactper}
+Contact Number: ${contactnum}
+Expected No. of Guest: ${numguest}
+Expected No. of MCGI: ${nummcgi}
+Requested Topic: ${topic}
+Special Notes: ${spnotes}
+`;
 
   document.getElementById("output").value = msg;
 }
@@ -175,4 +209,44 @@ function exportMD() {
   a.href = URL.createObjectURL(blob);
   a.download = safeTitle + ".md";
   a.click();
+}
+
+
+// ==========================
+// Add to Google Calendar
+// ==========================
+function addToGoogleCalendar() {
+  const title = document.getElementById("title").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const venue = document.getElementById("venue").value;
+  const notes = document.getElementById("notes").value;
+
+  if (!title || !date || !time) {
+    showAlert("⚠️ Please fill in at least Title, Date, and Time.", "warning");
+    return;
+  }
+
+  // Format date/time for Google Calendar (YYYYMMDDTHHMMSSZ)
+  const startDateTime = new Date(`${date}T${time}`);
+  const endDateTime = new Date(startDateTime.getTime() + 2 * 60 * 60 * 1000); // default 2-hour duration
+
+  const startStr = startDateTime.toISOString().replace(/-|:|\.\d+/g, "");
+  const endStr = endDateTime.toISOString().replace(/-|:|\.\d+/g, "");
+
+  // Build Google Calendar URL
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startStr}/${endStr}&details=${encodeURIComponent(notes)}&location=${encodeURIComponent(venue)}&sf=true&output=xml`;
+
+  // Open in new tab
+  window.open(url, "_blank");
+}
+
+function showAlert(message, type = "danger") {
+  const alertPlaceholder = document.getElementById("alertPlaceholder");
+  alertPlaceholder.innerHTML = `
+    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  `;
 }

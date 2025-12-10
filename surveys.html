@@ -31,13 +31,10 @@
           <a class="nav-link" href="event-generate.html">Events Advisory Generation</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Upcoming Events</a>
+          <a class="nav-link" href="events.html">Upcoming Events</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="bsrequest.html">BS Request</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="biblestudy.html">Bible Study</a>
+          <a class="nav-link" href="surveys.html">Survey</a>
         </li>
       </ul>
     </div>
@@ -47,17 +44,17 @@
 <button class="toggle floating-btn" onclick="toggleDark()">🌙</button>
 
 <div class="container">
-  <h2 class="mb-3 text-center">Events Advisory Generator</h2>
+  <h2 class="mb-3 text-center">Survey Format Generator</h2>
 
   <input id="group" placeholder="Group (Organizer)" class="form-control" />
   <input id="title" placeholder="Event Title" class="form-control" />
   <input id="date" placeholder="Date" type="date" class="form-control" />
-  <input id="time" type="time" class="form-control" />
+  <input id="time" placeholder="Time" class="form-control" />
   <input id="venue" placeholder="Venue" class="form-control" />
   <input id="calltime" placeholder="Call Time" class="form-control" />
   <input id="uniform" placeholder="Uniform" class="form-control" />
   <input id="who" placeholder="Who" class="form-control" />
-  <textarea id="notes" placeholder="Notes (optional)" class="form-control"></textarea>
+  <textarea id="notes" placeholder="Attendees" class="form-control"></textarea>
   <input id="poster" placeholder="Poster Link (optional)" class="form-control" />
   <input id="gmaps" placeholder="Google Maps Link (optional)" class="form-control" />
   <textarea id="cc" placeholder="CC (optional)" class="form-control"></textarea>
@@ -78,11 +75,6 @@
     <button onclick="exportText()">Export .txt</button>
     <button onclick="exportMD()">Export .md</button>
   </div>
-
-  <div class="d-grid gap-2">
-  <button onclick="addToGoogleCalendar()">Add to Google Calendar</button>
-  </div>
-
 </div><br>
 
 <br><footer class="mt-auto py-2" style="background-color: #347aee;">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BREAD Event Message Generator</title>
+  <title>BREAD Bible Study Format Generator</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
@@ -47,23 +47,48 @@
 <button class="toggle floating-btn" onclick="toggleDark()">🌙</button>
 
 <div class="container">
-  <h2 class="mb-3 text-center">Events Advisory Generator</h2>
+  <h2 class="mb-3 text-center">Bible Study Format Generator</h2>
 
-  <input id="group" placeholder="Group (Organizer)" class="form-control" />
-  <input id="title" placeholder="Event Title" class="form-control" />
-  <input id="date" placeholder="Date" type="date" class="form-control" />
-  <input id="time" type="time" class="form-control" />
-  <input id="venue" placeholder="Venue" class="form-control" />
-  <input id="calltime" placeholder="Call Time" class="form-control" />
-  <input id="uniform" placeholder="Uniform" class="form-control" />
-  <input id="who" placeholder="Who" class="form-control" />
-  <textarea id="notes" placeholder="Notes (optional)" class="form-control"></textarea>
-  <input id="poster" placeholder="Poster Link (optional)" class="form-control" />
-  <input id="gmaps" placeholder="Google Maps Link (optional)" class="form-control" />
-  <textarea id="cc" placeholder="CC (optional)" class="form-control"></textarea>
+  <input id="chapdist" placeholder="Chapter/Dist:" class="form-control" />
+  <input id="bsdate" placeholder="Date" type="date" class="form-control" />
+  <input id="time-start" placeholder="Time Start" class="form-control" />
+  <input id="time-end" placeholder="Time End" class="form-control" />
+  <input id="bsvenue" placeholder="Venue" class="form-control" />
+  <input id="landmark" placeholder="Landmark" class="form-control" />
+  <input id="contact-per" placeholder="Contact Person" class="form-control" />
+  <input id="contact-num" placeholder="Contact Number" class="form-control" />
+  <input id="numguest" placeholder="Expected No. of Guest" class="form-control" />
+  <input id="nummcgi" placeholder="Expected No. of MCGI" class="form-control" />
+  <input id="topic" placeholder="Requested Topic" class="form-control" />
+  
+  <div class="d-grid gap-2">
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#etopics" aria-expanded="false" aria-controls="etopics">View Existing Topics with Slides</button>
+    <div class="collapse" id="etopics">
+        <div class="card card-body" style="color:gray">
+        EXISTING TOPICS WITH SLIDES<br>
+        (Alphabetical Order)<br>
+        <ol>
+            <li>Atheism</li>
+            <li>Bullying</li>
+            <li>Depression</li>
+            <li>Drug Abuse</li>
+            <li>Early Pregnancy</li>
+            <li>Electing a Leader</li>
+            <li>Gaming Disorder</li>
+            <li>HIV</li>
+            <li>Music Therapy</li>
+            <li>Social Media</li>
+            <li>Stress</li>
+            <li>Suicide</li>
+        </ol>
+        </div>
+    </div>
+  </div>
+
+  <textarea id="spnotes" placeholder="Special Notes" class="form-control"></textarea>
 
   <div class="d-grid gap-2">
-    <button onclick="generateMessage()">Generate</button>
+    <button onclick="generateBSMessage()">Generate</button>
   </div>
   
   <h3 class="mt-3">Output</h3>
@@ -78,11 +103,6 @@
     <button onclick="exportText()">Export .txt</button>
     <button onclick="exportMD()">Export .md</button>
   </div>
-
-  <div class="d-grid gap-2">
-  <button onclick="addToGoogleCalendar()">Add to Google Calendar</button>
-  </div>
-
 </div><br>
 
 <br><footer class="mt-auto py-2" style="background-color: #347aee;">
