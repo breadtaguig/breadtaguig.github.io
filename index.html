@@ -6,6 +6,8 @@
     <title>BREAD Society Taguig</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Main CSS -->
     <link href="main.css" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
@@ -14,7 +16,7 @@
     <link rel="manifest" href="/static/site.webmanifest">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-custom-blue">
     <div class="container-fluid">
@@ -31,23 +33,52 @@
         <li class="nav-item">
             <a class="nav-link" href="events.html">Upcoming Events</a>
         </li>
-        </ul>
-    </div>
-    </div>
+        <li class="nav-item">
+        </li>
+    </ul>
+</div>
+</div>
 </nav>
-
-<button class="toggle" onclick="toggleDark()">🌙</button>
+<button class="toggle floating-btn" onclick="toggleDark()">🌙</button>
 
 <!-- Main content --><br>
 <div class="container">
-    <h1 class="mb-3">Welcome to BREAD Society Taguig!</h1>
+    <h1 class="text-center mb-3">Welcome to BREAD Society Taguig!</h1>
     <p class="text-center">We Read, We Listen, We Act. This is for <b>Internal Use Only</b>.</p>
 
     <div class="d-grid gap-3 col-8 col-md-6 mx-auto btn-container">
-    <a href="event-generate.html" class="btn btn-custom-blue btn-lg">Events Advisory Generation</a>
-    <a href="events.html" class="btn btn-custom-blue btn-lg">View Upcoming Events</a>
+    <a href="event-generate.html" class="btn btn-primary btn-lg">Events Advisory Generation</a>
+    <a href="events.html" class="btn btn-primary btn-lg">View Upcoming Events</a>
     </div>
 </div>
+
+<br><footer class="mt-auto py-2" style="background-color: #347aee;">
+  <div class="footer-container d-flex justify-content-center align-items-center gap-3 flex-wrap text-white">
+    <!-- Left side: YouTube & Facebook -->
+    <div class="d-flex align-items-center gap-2">
+      <a href="https://youtube.com/@mcgibread" target="_blank" class="text-white">
+        <i class="bi bi-youtube"></i>
+      </a>
+      <a href="https://facebook.com/mcgibread" target="_blank" class="text-white">
+        <i class="bi bi-facebook"></i>
+      </a>
+      <span>/mcgibread</span>
+    </div>
+
+    <!-- Right side: Instagram, X, Email -->
+    <div class="d-flex align-items-center gap-2">
+      <a href="https://instagram.com/mcgibread" target="_blank" class="text-white">
+        <i class="bi bi-instagram"></i>
+      </a>
+      <a href="https://x.com/mcgibread" target="_blank" class="text-white">
+        <i class="bi bi-x"></i>
+      </a>
+      <span>@mcgibread</span>
+      <i class="bi bi-envelope-fill"></i>
+      <span>bread@mcgi.org</span>
+    </div>
+  </div>
+</footer>
 
 <!-- Bootstrap JS (with Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

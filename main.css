@@ -19,10 +19,19 @@ body {
 .container {
   max-width: 700px;
   margin: auto;
-  background-color: #347aee;
+  background-color: darkblue;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+.footer-container {
+  max-width: 700px;
+  margin: auto;
+  background-color: #347aee;
+  /* padding: 30px; */
+  border-radius: 10px;
   transition: 0.3s;
 }
 
@@ -62,6 +71,16 @@ button:hover {
   background-color: #2455a1;
 }
 
+.floating-btn {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1050; /* above other elements */
+  border-radius: 50%;
+  padding: 12px 16px;
+  font-size: 20px;
+}
+
 /* Custom buttons (for homepage) */
 .btn-custom-blue {
   background-color: #347aee;
@@ -74,6 +93,42 @@ button:hover {
   border-color: #2b68cc;
   color: white;
 }
+
+/* Yellow button */
+.btn-custom-yellow {
+  background-color: #f6c914;
+  border-color: #f6c914;
+  color: white;
+}
+.btn-custom-yellow:hover {
+  background-color: #e0b00f;
+  border-color: #e0b00f;
+  color: white;
+}
+
+.dark-mode .btn-custom-blue {
+  background-color: #f6c914;
+  border-color: #f6c914;
+  color: #011f50;
+}
+
+.dark-mode .btn-custom-blue:hover {
+  background-color: #e0b00f;
+  border-color: #e0b00f;
+}
+
+.dark-mode .btn-custom-yellow {
+  background-color: #347aee;
+  border-color: #347aee;
+  color: white;
+}
+
+.dark-mode .btn-custom-yellow:hover {
+  background-color: #2b68cc;
+  border-color: #2b68cc;
+}
+
+
 
 /* Navbar */
 .bg-custom-blue {

@@ -80,18 +80,42 @@ ${poster ? `🖼️ 𝗣𝗼𝘀𝘁𝗲𝗿: ${poster}` : ""}${gmaps ? `\n🌍 
 // ==========================
 // Copy to Clipboard
 // ==========================
+function showCopyAlert() {
+  const alertPlaceholder = document.getElementById('alertPlaceholder');
+  const alert = document.createElement('div');
+  alert.className = 'alert alert-success alert-dismissible fade show';
+  alert.role = 'alert';
+  alert.innerHTML = `
+    Copied to Clipboard
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  alertPlaceholder.appendChild(alert);
+
+  // Auto-dismiss after 3 seconds
+  setTimeout(() => {
+    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+    bsAlert.close();
+  }, 3000);
+}
+
 function copyMessage() {
   const output = document.getElementById("output");
-  output.select();
-  document.execCommand("copy");
-  alert("Copied to clipboard!");
+
+  // Modern copy method
+  navigator.clipboard.writeText(output.value).then(() => {
+    showCopyAlert();
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
 }
+
 
 // ==========================
 // Dark Mode Toggle with Persistence and Icon
 // ==========================
 const toggleButton = document.querySelector('.toggle');
 
+// Toggle dark mode function
 function toggleDark() {
   document.body.classList.toggle('dark-mode');
 
@@ -103,6 +127,18 @@ function toggleDark() {
     toggleButton.textContent = '🌙'; // Dark icon when light mode is active
   }
 }
+
+// Check localStorage on page load and apply dark mode if enabled
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark-mode');
+    toggleButton.textContent = '☀️';
+  } else {
+    document.body.classList.remove('dark-mode');
+    toggleButton.textContent = '🌙';
+  }
+});
+
 
 // Apply saved dark mode on page load
 document.addEventListener('DOMContentLoaded', () => {
