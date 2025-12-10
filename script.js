@@ -61,8 +61,9 @@ function generateMessage() {
   const notes = sanitizeInput(document.getElementById("notes").value);
   const poster = validateURL(document.getElementById("poster").value, document.getElementById("poster"));
   const gmaps = validateURL(document.getElementById("gmaps").value, document.getElementById("gmaps"));
+  const cc = sanitizeInput(document.getElementById("cc").value);
 
-  const msg = `${group}
+  const msg = `${group || "MCGI Bible Readers"}
 📢 𝗘𝘃𝗲𝗻𝘁: ${title || "Event Title"}
 📅 𝗗𝗮𝘁𝗲: ${date}
 ⏰ 𝗧𝗶𝗺𝗲: ${time}
@@ -72,7 +73,7 @@ function generateMessage() {
 👥 𝗪𝗵𝗼: ${who}
 📝 𝗡𝗼𝘁𝗲𝘀:
 ${notes}
-${poster ? `🖼️ 𝗣𝗼𝘀𝘁𝗲𝗿: ${poster}` : ""}${gmaps ? `\n🌍 𝗚𝗼𝗼𝗴𝗹𝗲 𝗠𝗮𝗽𝘀: ${gmaps}` : ""}`;
+${poster ? `🖼️ 𝗣𝗼𝘀𝘁𝗲𝗿: ${poster}` : ""}${gmaps ? `\n🌍 𝗚𝗼𝗼𝗴𝗹𝗲 𝗠𝗮𝗽𝘀: ${gmaps}` : ""}${cc ? `𝗖𝗖 :\n${cc}` : ""}`;
 
   document.getElementById("output").value = msg;
 }

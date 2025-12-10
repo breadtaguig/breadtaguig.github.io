@@ -43,7 +43,7 @@
 <div class="container">
   <h2 class="mb-3 text-center">Events Advisory Generator</h2>
 
-  <input id="group" placeholder="Group" class="form-control" />
+  <input id="group" placeholder="Group (Organizer)" class="form-control" />
   <input id="title" placeholder="Event Title" class="form-control" />
   <input id="date" placeholder="Date" type="date" class="form-control" />
   <input id="time" placeholder="Time" class="form-control" />
@@ -51,9 +51,10 @@
   <input id="calltime" placeholder="Call Time" class="form-control" />
   <input id="uniform" placeholder="Uniform" class="form-control" />
   <input id="who" placeholder="Who" class="form-control" />
-  <textarea id="notes" placeholder="Other Notes..." class="form-control"></textarea>
+  <textarea id="notes" placeholder="Notes (optional)" class="form-control"></textarea>
   <input id="poster" placeholder="Poster Link (optional)" class="form-control" />
   <input id="gmaps" placeholder="Google Maps Link (optional)" class="form-control" />
+  <textarea id="cc" placeholder="CC (optional)" class="form-control"></textarea>
 
   <div class="d-grid gap-2">
     <button onclick="generateMessage()">Generate</button>
