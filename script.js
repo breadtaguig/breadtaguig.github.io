@@ -1,3 +1,6 @@
+// ==========================
+// Security
+// ==========================
 // Escape HTML to prevent XSS
 function sanitizeInput(input) {
   if (!input) return "";
@@ -23,6 +26,9 @@ function validateURL(url, inputElement) {
   return "";
 }
 
+// ==========================
+// Date
+// ==========================
 // Format date as "December 14, 2025 | Sunday"
 function toReadableDate(raw) {
   if (!raw) return "";
@@ -79,6 +85,9 @@ ${poster ? `🖼️ 𝗣𝗼𝘀𝘁𝗲𝗿: ${poster}` : ""}${gmaps ? `\n🌍 
   document.getElementById("output").value = msg;
 }
 
+// ==========================
+// BS
+// ==========================
 function generateBSMessage() {
   //const group = toSansBold(sanitizeInput(document.getElementById("group").value));
   const chapdist = sanitizeInput(document.getElementById("chapdist").value);
@@ -113,6 +122,64 @@ Special Notes: ${spnotes}
 }
 
 // ==========================
+// Multi Events
+// ==========================
+function addEvent() {
+  const list = document.getElementById("eventList");
+  const items = document.querySelectorAll(".eventItem");
+  const clone = items[0].cloneNode(true);
+
+  // Clear values on the clone
+  clone.querySelectorAll("input, textarea").forEach(el => el.value = "");
+
+  list.appendChild(clone);
+}
+
+function generateAll() {
+  const eventItems = document.querySelectorAll(".eventItem");
+  let finalOutput = "";
+
+  eventItems.forEach((item, index) => {
+    const group = sanitizeInput(item.querySelector(".group").value);
+    const title = sanitizeInput(item.querySelector(".title").value);
+    const date = toReadableDate(item.querySelector(".date").value);
+    const time = sanitizeInput(item.querySelector(".time").value);
+    const venue = sanitizeInput(item.querySelector(".venue").value);
+    const calltime = sanitizeInput(item.querySelector(".calltime").value);
+    const uniform = sanitizeInput(item.querySelector(".uniform").value);
+    const who = sanitizeInput(item.querySelector(".who").value);
+    const notes = sanitizeInput(item.querySelector(".notes").value);
+    const cc = sanitizeInput(item.querySelector(".cc").value);
+
+    const poster = validateURL(item.querySelector(".poster").value, item.querySelector(".poster"));
+    const gmaps = validateURL(item.querySelector(".gmaps").value, item.querySelector(".gmaps"));
+
+    finalOutput += 
+`${group || "MCGI Bible Readers"}
+📢 𝗘𝘃𝗲𝗻𝘁: ${title}
+📅 𝗗𝗮𝘁𝗲: ${date}
+⏰ 𝗧𝗶𝗺𝗲: ${time}
+📍 𝗩𝗲𝗻𝘂𝗲: ${venue}
+⏱️ 𝗖𝗮𝗹𝗹 𝗧𝗶𝗺𝗲: ${calltime}
+👕 𝗨𝗻𝗶𝗳𝗼𝗿𝗺: ${uniform}
+👥 𝗪𝗵𝗼: ${who}
+📝 𝗡𝗼𝘁𝗲𝘀:
+${notes}
+
+${poster ? `🖼️ Poster: ${poster}` : ""}
+${gmaps ? `🌍 Google Maps: ${gmaps}` : ""}
+${cc ? `𝗖𝗖:\n${cc}` : ""}
+
+----------------------------------------
+
+`;
+  });
+
+  document.getElementById("output").value = finalOutput.trim();
+}
+
+
+// ==========================
 // Copy to Clipboard
 // ==========================
 function showCopyAlert() {
@@ -142,6 +209,13 @@ function copyMessage() {
   }).catch(err => {
     console.error('Failed to copy: ', err);
   });
+}
+
+// ==========================
+// Clear Output
+// ==========================
+function clearOutput() {
+  document.getElementById("output").value = "";
 }
 
 
@@ -241,6 +315,9 @@ function addToGoogleCalendar() {
   window.open(url, "_blank");
 }
 
+// ==========================
+// Alert
+// ==========================
 function showAlert(message, type = "danger") {
   const alertPlaceholder = document.getElementById("alertPlaceholder");
   alertPlaceholder.innerHTML = `
