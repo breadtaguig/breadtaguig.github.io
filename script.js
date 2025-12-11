@@ -290,28 +290,40 @@ function exportMD() {
 // Add to Google Calendar
 // ==========================
 function addToGoogleCalendar() {
-  const title = document.getElementById("title").value;
-  const date = document.getElementById("date").value;
-  const time = document.getElementById("time").value;
-  const venue = document.getElementById("venue").value;
-  const notes = document.getElementById("notes").value;
+  const firstEvent = document.querySelector(".eventItem");
+
+  const title = firstEvent.querySelector(".title").value;
+  const date = firstEvent.querySelector(".date").value;
+  const time = firstEvent.querySelector(".time").value;
+  const venue = firstEvent.querySelector(".venue").value;
+  const notes = firstEvent.querySelector(".notes").value;
 
   if (!title || !date || !time) {
     showAlert("⚠️ Please fill in at least Title, Date, and Time.", "warning");
     return;
   }
 
-  // Format date/time for Google Calendar (YYYYMMDDTHHMMSSZ)
-  const startDateTime = new Date(`${date}T${time}`);
-  const endDateTime = new Date(startDateTime.getTime() + 2 * 60 * 60 * 1000); // default 2-hour duration
+  // Build start and end datetime in LOCAL TIME (no Z suffix)
+  const start = new Date(`${date}T${time}`);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
 
-  const startStr = startDateTime.toISOString().replace(/-|:|\.\d+/g, "");
-  const endStr = endDateTime.toISOString().replace(/-|:|\.\d+/g, "");
+  const pad = (n) => (n < 10 ? "0" + n : n);
+
+  const formatLocal = (d) =>
+    `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+
+  const startStr = formatLocal(start);
+  const endStr = formatLocal(end);
 
   // Build Google Calendar URL
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startStr}/${endStr}&details=${encodeURIComponent(notes)}&location=${encodeURIComponent(venue)}&sf=true&output=xml`;
+  const url =
+    `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(title)}` +
+    `&dates=${startStr}/${endStr}` +
+    `&details=${encodeURIComponent(notes)}` +
+    `&location=${encodeURIComponent(venue)}` +
+    `&sf=true&output=xml`;
 
-  // Open in new tab
   window.open(url, "_blank");
 }
 
