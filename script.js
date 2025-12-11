@@ -328,6 +328,56 @@ function addToGoogleCalendar() {
 }
 
 // ==========================
+// Add to Calendar (.ics)
+// ==========================
+function exportICS() {
+  const firstEvent = document.querySelector(".eventItem");
+
+  const title = firstEvent.querySelector(".title").value;
+  const date = firstEvent.querySelector(".date").value;
+  const time = firstEvent.querySelector(".time").value;
+  const venue = firstEvent.querySelector(".venue").value;
+  const notes = firstEvent.querySelector(".notes").value;
+
+  if (!title || !date || !time) {
+    alert("Please fill in Title, Date & Time.");
+    return;
+  }
+
+  const start = new Date(`${date}T${time}`);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
+  const pad = (n) => (n < 10 ? "0" + n : n);
+  const formatICS = (d) =>
+    `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+
+  const startICS = formatICS(start);
+  const endICS = formatICS(end);
+
+  const icsContent =
+`BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${title}
+DTSTART:${startICS}
+DTEND:${endICS}
+LOCATION:${venue}
+DESCRIPTION:${notes}
+END:VEVENT
+END:VCALENDAR`;
+
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = title.replace(/[^a-z0-9\- ]/gi, "_") + ".ics";
+  a.click();
+}
+
+
+
+// ==========================
 // Alert
 // ==========================
 function showAlert(message, type = "danger") {
