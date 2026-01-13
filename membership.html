@@ -3,3 +3,110 @@ title: Membership Monitoring
 description: >-
 
 ---
+
+<!-- Main Content -->
+<main class="container py-4 my-4 mw-100">
+  <h2 class="text-center mb-4">📊 Attendance Statistics</h2>
+  <p class="text-center small text-muted mb-4">Internal use only – auto-updated from Google Forms</p>
+
+  <!-- Filters -->
+  <div class="row g-3 mb-3">
+    <div class="col-md-4">
+      <label>Filter by Chapter</label>
+      <select id="filterChapter" class="form-select"></select>
+    </div>
+    <div class="col-md-4">
+      <label>Filter by Event Type</label>
+      <select id="filterEvent" class="form-select"></select>
+    </div>
+    <div class="col-md-4">
+      <label>Filter by Week</label>
+      <select id="filterWeek" class="form-select"></select>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <!-- By Chapter -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">By Chapter / Locale</h6>
+          <div class="chart-container"><canvas id="chapterChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- By Membership -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">By Membership Type</h6>
+          <div class="chart-container"><canvas id="membershipChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- By Event Type -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">By Event Type</h6>
+          <div class="chart-container"><canvas id="eventChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- By Venue -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">By Venue / Platform</h6>
+          <div class="chart-container"><canvas id="venueChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Summary -->
+    <hr>
+    <h2 class="mb-3 text-center">Weekly Summary</h2>
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">📅 Weekly Attendance Summary</h6>
+          <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Table -->
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">📋 Weekly Attendance Table</h6>
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm small">
+              <thead class="table-light">
+                <tr>
+                  <th>Week Starting</th>
+                  <th>Total Attendance</th>
+                </tr>
+              </thead>
+              <tbody id="weeklyTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly by Chapter -->
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">🏫 Weekly Attendance by Chapter</h6>
+          <div class="chart-container"><canvas id="weeklyChapterChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
