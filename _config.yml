@@ -1,24 +1,24 @@
 # ----
 # Site
 
-title: Hydra Template
-url: "https://proud-alligator.cloudvent.net"
+title: BREAD Taguig
+url: "https://breadtaguig.github.io/"
 baseurl:
 google_analytics_key:
 google_maps_javascript_api_key:
 disqus_shortname:
 
 # Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
-logo: /siteicon.png
-description: Product marketing template for Jekyll.
+logo: /favicon.ico
+description: 
 author:
-  name:
-  email:
-  twitter: # twitter username without the @ symbol
+  name: BREAD Taguig
+  email: breadncrstaguig@gmail.com
+  twitter: mcgibread # twitter username without the @ symbol
 social:
-  name: Hydra Template
+  name: 
   links:
-    - https://github.com/CloudCannon/hydra-jekyll-template
+    - 
 
 # -----
 # Build
@@ -88,12 +88,8 @@ _select_data:
   social_icons:
     - Facebook
     - Instagram
-    - LinkedIn
-    - Pinterest
-    - Tumblr
     - Twitter
     - YouTube
-    - RSS
 
 _comments:
   map: Update the map location and display settings.

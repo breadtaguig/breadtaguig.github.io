@@ -1,5 +1,13 @@
-- name: Pricing
-  link: /pricing/
+- name: Advisory
+  link: /generate-advisory/
+  new_window: false
+  highlight: false
+- name: Events
+  link: /events/
+  new_window: false
+  highlight: false
+- name: Membership
+  link: /membership/
   new_window: false
   highlight: false
 - name: Blog
@@ -10,15 +18,7 @@
   link: /about/
   new_window: false
   highlight: false
-- name: Contact
-  link: /contact/
-  new_window: false
-  highlight: false
-- name: Login
-  link: /
-  new_window: true
-  highlight: false
-- name: Sign Up
-  link: /
-  new_window: true
-  highlight: true
+# - name: Sign Up
+#   link: /
+#   new_window: true
+#   highlight: true
