@@ -3,3 +3,64 @@ title: Events Advisory Generation
 description: 
 
 ---
+
+<div class="container">
+  <div id="eventList">
+    <div class="eventItem border rounded p-3 mb-3">
+      <h4>Event</h4>
+      <input class="group form-control" placeholder="Group (Organizer)" />
+      <input class="title form-control" placeholder="Event Title" />
+      <input class="date form-control" placeholder="Date" type="date" />
+      <input class="time form-control" type="time" />
+      <input class="venue form-control" placeholder="Venue" />
+      <input class="calltime form-control" placeholder="Call Time" />
+      <input class="uniform form-control" placeholder="Uniform" />
+      <input class="who form-control" placeholder="Who" />
+      <textarea class="notes form-control" placeholder="Notes (optional)"></textarea>
+      <input class="poster form-control" placeholder="Poster Link (optional)"  />
+      <input class="gmaps form-control" placeholder="Google Maps Link (optional)" />
+      <textarea class="cc form-control" placeholder="CC (optional)"></textarea>
+    </div>
+  </div>
+  
+  <div class="d-grid gap-2">
+    <button onclick="addEvent()" class="btn btn-secondary">➕ Add Another Event</button>
+  </div>
+  
+<div class="d-grid gap-2">
+  <button onclick="generateAll()">Generate</button>
+</div>
+<br><hr>
+  <h3 class="mt-3">Output</h3>
+  <textarea id="output" readonly class="form-control"></textarea>
+  
+  <div id="alertPlaceholder" class="mt-3"></div>
+  
+  <div class="row g-2">
+    <div class="col-6">
+      <button class="w-100" onclick="copyMessage()">Copy to Clipboard</button>
+    </div>
+    <div class="col-6">
+      <button class="w-100" onclick="clearOutput()">Clear Output</button>
+    </div>
+  </div><br>
+  
+  <div class="row g-2">
+    <div class="col-6">
+      <button class="w-100" onclick="exportText()">Export .txt</button>
+    </div>
+    <div class="col-6">
+      <button class="w-100" onclick="exportMD()">Export .md</button>
+    </div>
+  </div>
+
+  <div class="row g-2">
+    <div class="col-6">
+      <button class="w-100" onclick="addToGoogleCalendar()">Add to Google Calendar</button>
+    </div>
+    <div class="col-6">
+      <button class="w-100" onclick="exportICS()">Add to Calendar (.ics)</button>
+    </div>
+  </div>
+
+</div>
