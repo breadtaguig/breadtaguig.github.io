@@ -1,19 +1,19 @@
 - links:
   - name: Advisory
-    link: /generate-advisory/
+    link: /generate-advisory
   - name: Events
-    link: /events/
+    link: /events
   - name: Blog
     link: /blog/
   - name: About
-    link: /about/
+    link: /about
 - links:
   - name: Membership
     link: /membership
   - name: Contact
     link: /contact
   - name: AR Generator
-    link: /ar-generator/
+    link: /ar-generator
 - links:
   - name: Facebook
     link: https://facebook.com/mcgibread/
