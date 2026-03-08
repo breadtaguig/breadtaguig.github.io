@@ -10,7 +10,7 @@
      missing will be hidden automatically.
   ══════════════════════════════════════════════════════════ */
   const SUGGESTED = [
-    { label: 'MCGI Youth', src: '../images/mcgi-youth.jpg'  },
+    { label: 'MCGI Youth', src: '../images/mcgi-youth.png'  },
     { label: 'South',      src: '../images/south-kktk.png'  },
     { label: 'GCOS',       src: '../images/gcos.png'       },
     { label: 'BREAD',      src: '../images/bread.png'        },
