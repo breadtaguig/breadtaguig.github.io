@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport-fit=cover extends into notch areas on iPhones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <title>Activity Report Generator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="../css/ar-gen.css">
+</head>
+<body>
+
+  <!-- Saving overlay -->
+  <div class="saving-overlay" id="saving-overlay">
+    <div class="saving-spinner"></div>
+    <div class="saving-text">Saving image…</div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="dot"></div>
+      <div>
+        <div class="topbar-name">Youth ReportCraft</div>
+        <div class="topbar-sub">Activity Report Generator</div>
+      </div>
+    </div>
+    <div id="layout-pill">No images yet</div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- ── LEFT PANEL ── -->
+    <aside class="panel">
+
+      <div class="eyebrow">Organization</div>
+
+      <!-- LOGOS -->
+      <div class="row2" style="margin-bottom:6px;">
+        <div class="logo-col">
+          <label>Left Logo</label>
+          <div class="logo-upload-box" id="logo-left-box"
+               onclick="document.getElementById('logo-left-input').click()">
+            <span class="placeholder-txt">+ Upload</span>
+          </div>
+          <input type="file" id="logo-left-input" accept="image/*" style="display:none">
+          <div class="suggested-label">Suggested</div>
+          <div class="suggested-logos" id="sug-left"></div>
+        </div>
+        <div class="logo-col">
+          <label>Right Logo</label>
+          <div class="logo-upload-box" id="logo-right-box"
+               onclick="document.getElementById('logo-right-input').click()">
+            <span class="placeholder-txt">+ Upload</span>
+          </div>
+          <input type="file" id="logo-right-input" accept="image/*" style="display:none">
+          <div class="suggested-label">Suggested</div>
+          <div class="suggested-logos" id="sug-right"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Organization Name</label>
+        <input id="f-orgname" type="text" value="MCGI YOUTH" placeholder="e.g. MCGI YOUTH">
+      </div>
+      <div class="field">
+        <label>Sub-title / District</label>
+        <input id="f-orgsub" type="text" value="NCR DISTRICT 2 – TAGUIG CITY"
+               placeholder="e.g. NCR District 2">
+      </div>
+
+      <hr class="sep">
+      <div class="eyebrow">Report Info</div>
+
+      <div class="field">
+        <label>Report Title</label>
+        <input id="f-title" type="text" value="MCGI YOUTH TAGUIG LOCALE VISIT"
+               placeholder="Report title">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Date</label>
+          <input id="f-date" type="text" placeholder="Saturday, March 7, 2026">
+        </div>
+        <div class="field">
+          <label>Time</label>
+          <input id="f-time" type="text" value="5:00 PM" placeholder="5:00 PM">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Venue</label>
+          <input id="f-venue" type="text" value="Locale of Bagumbayan" placeholder="Venue">
+        </div>
+        <div class="field">
+          <!-- Shorter label on mobile -->
+          <label>No. of Participants</label>
+          <input id="f-participants" type="text" inputmode="numeric" value="7" placeholder="42">
+        </div>
+      </div>
+      <div class="field">
+        <label>Prepared By</label>
+        <input id="f-author" type="text" value="CITY YOUTH OFFICERS" placeholder="Prepared by">
+      </div>
+
+      <hr class="sep">
+      <div class="eyebrow">Photos (1–4)</div>
+      <div class="count-pill" id="count-pill"><span id="count-text">0/4</span></div>
+
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-icon">⊕</div>
+        <div class="drop-text"><strong>Tap or drag</strong> photos here</div>
+        <div class="drop-slots" id="slots-label">Up to 4 photos</div>
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none">
+      <div class="thumbs" id="thumbs"></div>
+
+      <button class="gen-btn" id="gen-btn">Generate Report →</button>
+    </aside>
+
+    <!-- ── PREVIEW ── -->
+    <main class="preview" id="preview-area">
+      <div class="empty" id="empty-state">
+        <div class="empty-glyph">◈</div>
+        <div class="empty-title">Preview appears here</div>
+        <div class="empty-sub">Fill in the details, add 1–4 photos, then tap Generate.</div>
+      </div>
+    </main>
+
+  </div><!-- .workspace -->
+
+  <script src="../js/ar-gen.js"></script>
+</body>
+</html>

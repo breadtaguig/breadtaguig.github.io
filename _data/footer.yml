@@ -12,6 +12,8 @@
     link: /membership
   - name: Contact
     link: /contact
+  - name: AR Generator
+    link: /ar-generator/
 - links:
   - name: Facebook
     link: https://facebook.com/mcgibread/
