@@ -5,24 +5,21 @@
 
   /* ══════════════════════════════════════════════════════════
      SUGGESTED LOGOS
-     Add your image files to the images/ folder next to the
-     HTML file and list them here.  Any entry whose file is
-     missing will be hidden automatically.
   ══════════════════════════════════════════════════════════ */
   const SUGGESTED = [
     { label: 'MCGI Youth', src: '../images/mcgi-youth.png'  },
     { label: 'South',      src: '../images/south-kktk.png'  },
-    { label: 'GCOS',       src: '../images/gcos.png'       },
-    { label: 'BREAD',      src: '../images/bread.png'        },
-    { label: 'MD',         src: '../images/md.png'        },
-    { label: 'TK',         src: '../images/tk.png'     },
-    { label: 'AG',         src: '../images/ag.png'       },
-    { label: 'TYC',        src: '../images/tyc.png'       },
-    { label: 'TPYC',       src: '../images/tpyc.png'       }
+    { label: 'GCOS',       src: '../images/gcos.png'        },
+    { label: 'BREAD',      src: '../images/bread.png'       },
+    { label: 'MD',         src: '../images/md.png'          },
+    { label: 'TK',         src: '../images/tk.png'          },
+    { label: 'AG',         src: '../images/ag.png'          },
+    { label: 'TYC',        src: '../images/tyc.png'         },
+    { label: 'TPYC',       src: '../images/tpyc.png'        },
   ];
 
   /* ══ STATE ══ */
-  const imgs = [];          // { src, name, w, h }
+  const imgs = [];
   let logoLeft  = null;
   let logoRight = null;
   let selLeft   = -1;
@@ -46,6 +43,7 @@
   const layoutPill  = document.getElementById('layout-pill');
   const previewArea = document.getElementById('preview-area');
   const overlay     = document.getElementById('saving-overlay');
+  const savingText  = document.getElementById('saving-text');
 
   /* Default date */
   const nd = new Date();
@@ -92,11 +90,9 @@
 
   function buildSuggestedUI(containerId, side) {
     const container = document.getElementById(containerId);
-
-    /* "No logos found" notice */
     const notice = document.createElement('div');
-    notice.className = 'sug-empty-notice';
-    notice.id        = containerId + '-notice';
+    notice.className   = 'sug-empty-notice';
+    notice.id          = containerId + '-notice';
     notice.textContent = 'Place logos in images/ folder';
 
     SUGGESTED.forEach(function (s, i) {
@@ -129,13 +125,11 @@
 
   function selectSuggested(side, idx, src, tileEl) {
     if (side === 'left') {
-      selLeft  = idx;
-      logoLeft = src;
+      selLeft  = idx; logoLeft = src;
       updateLogoBox('logo-left-box', src, 'left');
       highlightSug('sug-left', tileEl);
     } else {
-      selRight  = idx;
-      logoRight = src;
+      selRight  = idx; logoRight = src;
       updateLogoBox('logo-right-box', src, 'right');
       highlightSug('sug-right', tileEl);
     }
@@ -168,7 +162,6 @@
     }
   };
 
-  /* File upload for each logo slot */
   ['left', 'right'].forEach(function (side) {
     document.getElementById('logo-' + side + '-box')
       .addEventListener('click', function (e) {
@@ -233,8 +226,8 @@
     thumbsEl.innerHTML = '';
     imgs.forEach(function (img, i) {
       const d = document.createElement('div');
-      d.className  = 'thumb';
-      d.innerHTML  =
+      d.className = 'thumb';
+      d.innerHTML =
         '<img src="' + img.src + '">' +
         '<span class="thumb-num">#' + (i + 1) + '</span>' +
         '<button class="thumb-del" onclick="removeImg(' + i + ')">&#10005;</button>';
@@ -286,21 +279,22 @@
           ' \xB7 ' + (LAYOUTS[n] || 'No images') +
         '</span>' +
         '<div class="btn-row">' +
-          '<button class="action-btn" id="btn-html">Export HTML ↓</button>' +
-          '<button class="action-btn primary" id="btn-img">📷 Save as Image ↓</button>' +
+          '<button class="action-btn" id="btn-html">Export HTML \u2193</button>' +
+          '<button class="action-btn" id="btn-img">\uD83D\uDCF7 Save Image \u2193</button>' +
+          '<button class="action-btn primary" id="btn-img-hd">\u2728 Save HD \u2193</button>' +
         '</div>' +
       '</div>' +
       '<div id="report-wrapper">' + buildCard(data) + '</div>';
 
-    document.getElementById('btn-img') .addEventListener('click', function () { saveImage(data); });
-    document.getElementById('btn-html').addEventListener('click', function () { saveHTML(data);  });
+    document.getElementById('btn-img')   .addEventListener('click', function () { saveImage(data, false); });
+    document.getElementById('btn-img-hd').addEventListener('click', function () { saveImage(data, true);  });
+    document.getElementById('btn-html')  .addEventListener('click', function () { saveHTML(data);         });
   }
 
   /* ══════════════════════════════════════════════════════════
      BUILD REPORT CARD HTML
   ══════════════════════════════════════════════════════════ */
   function buildCard(data) {
-    /* Logos — appear beside the org name, not at outer edges */
     const lLogo = logoLeft
       ? '<img src="' + logoLeft  + '" style="max-width:72px;max-height:72px;object-fit:contain;">'
       : '';
@@ -308,7 +302,6 @@
       ? '<img src="' + logoRight + '" style="max-width:72px;max-height:72px;object-fit:contain;">'
       : '';
 
-    /* Meta columns — label bold, value normal weight */
     const metaItems = [
       data.date         ? '<div class="rc-meta-item"><span class="rc-label">DATE:</span> '                  + esc(data.date)         + '</div>' : '',
       data.time         ? '<div class="rc-meta-item"><span class="rc-label">TIME:</span> '                  + esc(data.time)         + '</div>' : '',
@@ -325,8 +318,6 @@
 
     return (
       '<div id="report-card">' +
-
-        /* Logo bar: left logo | centre text | right logo — all centred as a unit */
         '<div class="rc-logo-bar">' +
           '<div class="rc-logo-slot">' + lLogo + '</div>' +
           '<div class="rc-header-center">' +
@@ -335,37 +326,22 @@
           '</div>' +
           '<div class="rc-logo-slot">' + rLogo + '</div>' +
         '</div>' +
-
         '<div class="rc-title-section">' +
           '<div class="rc-report-title">' + esc(data.title) + '</div>' +
         '</div>' +
-
         metaHTML +
-
         (photosHTML ? '<div class="rc-photos">' + photosHTML + '</div>' : '') +
-
         '<div class="rc-footer">' +
           (data.author ? '<span class="rc-label">PREPARED BY:</span> ' + esc(data.author) : '') +
         '</div>' +
-
       '</div>'
     );
   }
 
   /* ══════════════════════════════════════════════════════════
      PHOTO LAYOUTS
-     On desktop the card is 650px wide; on mobile it's fluid.
-     We compute the actual usable width at build time so photos
-     always fill the card correctly at any screen size.
-
-     n=1  full width, natural aspect ratio
-     n=2  top + bottom, each at natural ratio
-     n=3  hero (natural ratio) + pair side-by-side below
-     n=4  2×2 grid (two rows of two)
   ══════════════════════════════════════════════════════════ */
-
   function getUsable() {
-    /* padding is 14px each side on mobile, 22px on desktop (≥900px) */
     const pad = window.innerWidth >= 900 ? 44 : 28;
     const cardW = Math.min(window.innerWidth, 650);
     return cardW - pad;
@@ -377,7 +353,6 @@
     const USABLE = getUsable();
     if (n === 0) return '';
 
-    /* n=1 — single image at natural ratio */
     if (n === 1) {
       const img   = images[0];
       const dispH = Math.round(USABLE * (img.h / img.w));
@@ -390,7 +365,6 @@
       );
     }
 
-    /* n=2 — stacked top + bottom, each natural ratio */
     if (n === 2) {
       function block2(img) {
         const dispH = Math.round(USABLE * (img.h / img.w));
@@ -407,7 +381,6 @@
       );
     }
 
-    /* n=3 — hero + pair */
     if (n === 3) {
       const hero  = images[0];
       const heroH = Math.round(USABLE * (hero.h / hero.w));
@@ -435,10 +408,8 @@
       );
     }
 
-    /* n=4 — 2 top + 2 bottom */
     if (n === 4) {
       const cellW = Math.floor((USABLE - GAP) / 2);
-
       function row4(imgA, imgB) {
         const rowH = Math.round(
           (Math.round(cellW * (imgA.h / imgA.w)) +
@@ -455,7 +426,6 @@
           '</div>'
         );
       }
-
       return (
         '<div style="display:flex;flex-direction:column;gap:' + GAP + 'px;">' +
           row4(images[0], images[1]) +
@@ -468,16 +438,23 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     SAVE AS IMAGE  (natural size — no fixed dimensions)
+     SAVE AS IMAGE
+     isHD = false → scale:2  (~1300px wide, fast)
+     isHD = true  → scale:4  (~2600px wide, print-quality)
+     No DOM resizing — card renders at its natural size.
   ══════════════════════════════════════════════════════════ */
-  function saveImage(data) {
+  function saveImage(data, isHD) {
     const card = document.getElementById('report-card');
     if (!card) return;
 
+    const scale  = isHD ? 4 : 2;
+    const suffix = isHD ? '-HD' : '';
+
+    savingText.textContent = isHD ? 'SAVING HD IMAGE…' : 'SAVING IMAGE…';
     overlay.classList.add('show');
 
     html2canvas(card, {
-      scale: 2,           /* 2× for high-DPI sharpness */
+      scale,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
@@ -485,7 +462,7 @@
     }).then(function (canvas) {
       overlay.classList.remove('show');
       const a = document.createElement('a');
-      a.download = (data.title || 'activity-report').replace(/\s+/g, '-').toLowerCase() + '.png';
+      a.download = (data.title || 'activity-report').replace(/\s+/g, '-').toLowerCase() + suffix + '.png';
       a.href = canvas.toDataURL('image/png');
       a.click();
     }).catch(function (err) {
