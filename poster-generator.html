@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCGI Youth Event Poster Generator</title>
+    <link rel="stylesheet" href="../css/poster.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="../images/mcgi-youth.png" alt="MCGI Youth Logo" class="nav-logo">
+            <h1>
+                <span class="text-white">MCGI</span> 
+                <span class="text-gold">YOUTH</span> 
+                <span class="text-light-blue">Event Generator</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="form-section">
+            <h2>Add Upcoming Event</h2>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" id="eventName" required placeholder="e.g. National Thanksgiving Celebration">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventDate">Date</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTime">Time</label>
+                        <input type="time" id="eventTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventLocation">Location</label>
+                    <input type="text" id="eventLocation" required placeholder="e.g. ADD Convention Center, Apalit">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventOrganizer">Organizer / Coordinator</label>
+                    <input type="text" id="eventOrganizer" required placeholder="e.g. National Youth Coordinator">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventLevel">Level of Activity</label>
+                        <select id="eventLevel" required>
+                            <option value="Locale">Locale</option>
+                            <option value="City">City</option>
+                            <option value="District">District</option>
+                            <option value="National">National</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventPoster">Event Poster (Optional)</label>
+                        <input type="file" id="eventPoster" accept="image/*">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Event to Queue</button>
+            </form>
+        </section>
+
+        <section class="preview-section">
+            <div class="event-list-container">
+                <h2>Events Queue (<span id="eventCount">0</span>)</h2>
+                <ul id="eventList" class="event-list"></ul>
+            </div>
+
+            <div class="actions">
+                <button id="generateBtn" class="btn btn-accent" disabled>Generate Previews</button>
+            </div>
+
+            <div id="canvasPreviewArea" class="canvas-preview-area" style="display: none;">
+                <h2>Preview Outputs</h2>
+                <div id="canvasesContainer" class="canvases-container"></div>
+                
+                <div class="download-actions">
+                    <button id="downloadStandardBtn" class="btn">⬇ Download PNG</button>
+                    <button id="downloadHDBtn" class="btn">⬇ Download HD PNG</button>
+                    <button id="downloadPDFBtn" class="btn btn-primary">⬇ Download PDF (300 DPI)</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="../js/poster.js" defer></script>
+</body>
+</html>

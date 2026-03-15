@@ -18,6 +18,10 @@
   link: /ar-generator
   new_window: false
   highlight: false  
+- name: Poster Generator
+  link: /poster-generator
+  new_window: false
+  highlight: false  
 - name: About
   link: /about
   new_window: false
