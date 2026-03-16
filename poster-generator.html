@@ -21,10 +21,10 @@
 
     <main class="container">
         <section class="form-section">
-            <h2>Add Upcoming Event</h2>
+            <h2 id="formTitle">Add Upcoming Event</h2>
             <form id="eventForm">
                 <div class="form-group">
-                    <label for="eventOrganizer">Calendar Owner</label>
+                    <label for="eventOrganizer">Calendar Owner / Organizer</label>
                     <input type="text" id="eventOrganizer" required placeholder="e.g. Taguig City">
                 </div>
 
@@ -70,13 +70,21 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Add Event to Queue</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary">Add Event to Queue</button>
+                <button type="button" id="cancelEditBtn" class="btn" style="display:none; margin-top:10px; background:#6c757d; color:white;">Cancel Edit</button>
             </form>
         </section>
 
         <section class="preview-section">
             <div class="event-list-container">
-                <h2>Events Queue (<span id="eventCount">0</span>)</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="margin: 0; border: none;">Events Queue (<span id="eventCount">0</span>)</h2>
+                    <div class="json-actions" style="display: flex; gap: 10px;">
+                        <button id="exportJsonBtn" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; width: auto; background: #27ae60; color: white;">📤 Export JSON</button>
+                        <button id="importJsonBtn" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; width: auto; background: #2980b9; color: white;">📥 Import JSON</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                    </div>
+                </div>
                 <ul id="eventList" class="event-list"></ul>
             </div>
 

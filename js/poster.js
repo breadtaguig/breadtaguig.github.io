@@ -1,14 +1,19 @@
 let eventsQueue = [];
+let editingEventId = null;
+
 const eventForm = document.getElementById('eventForm');
 const eventList = document.getElementById('eventList');
 const eventCount = document.getElementById('eventCount');
 const generateBtn = document.getElementById('generateBtn');
 const canvasPreviewArea = document.getElementById('canvasPreviewArea');
 const canvasesContainer = document.getElementById('canvasesContainer');
+const submitBtn = document.getElementById('submitBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
 
 // Utility to convert 24h time to 12h AM/PM
 function formatAMPM(timeString) {
     if (!timeString) return "";
+    if (timeString.includes('AM') || timeString.includes('PM')) return timeString;
     const [hour, minute] = timeString.split(':');
     let hours = parseInt(hour);
     const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -17,19 +22,30 @@ function formatAMPM(timeString) {
     return `${hours}:${minute} ${ampm}`;
 }
 
-// Get current date for naming convention
+// Convert 12h AM/PM back to 24h for the time input field
+function t12to24(time12h) {
+    const [time, modifier] = time12h.split(' ');
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') hours = '00';
+    if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+}
+
 function getFormattedDate() {
     return new Date().toISOString().split('T')[0];
 }
 
+// --- Form Handling ---
 eventForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const fileInput = document.getElementById('eventPoster');
     const file = fileInput.files[0];
 
     const processEntry = (imageData = null) => {
+        const eventId = editingEventId ? editingEventId : Date.now();
+        
         const newEvent = {
-            id: Date.now(),
+            id: eventId,
             organizer: document.getElementById('eventOrganizer').value,
             name: document.getElementById('eventName').value,
             date: document.getElementById('eventDate').value,
@@ -39,7 +55,19 @@ eventForm.addEventListener('submit', (e) => {
             level: document.getElementById('eventLevel').value,
             imageStr: imageData 
         };
-        eventsQueue.push(newEvent);
+
+        if (editingEventId) {
+            const index = eventsQueue.findIndex(ev => ev.id === editingEventId);
+            // Retain old image if no new file was uploaded during edit
+            if (!imageData && eventsQueue[index].imageStr) {
+                newEvent.imageStr = eventsQueue[index].imageStr;
+            }
+            eventsQueue[index] = newEvent;
+            resetFormState();
+        } else {
+            eventsQueue.push(newEvent);
+        }
+
         updateUI();
         eventForm.reset();
     };
@@ -53,26 +81,95 @@ eventForm.addEventListener('submit', (e) => {
     }
 });
 
+function editEvent(id) {
+    const ev = eventsQueue.find(e => e.id === id);
+    if (!ev) return;
+
+    editingEventId = id;
+    document.getElementById('eventOrganizer').value = ev.organizer;
+    document.getElementById('eventName').value = ev.name;
+    document.getElementById('eventDate').value = ev.date;
+    document.getElementById('eventTime').value = t12to24(ev.time);
+    document.getElementById('eventLocation').value = ev.location;
+    document.getElementById('eventAudience').value = ev.audience;
+    document.getElementById('eventLevel').value = ev.level;
+
+    submitBtn.innerText = "Update Event Details";
+    cancelEditBtn.style.display = "block";
+    document.getElementById('formTitle').innerText = "Edit Event";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+cancelEditBtn.addEventListener('click', resetFormState);
+
+function resetFormState() {
+    editingEventId = null;
+    submitBtn.innerText = "Add Event to Queue";
+    cancelEditBtn.style.display = "none";
+    document.getElementById('formTitle').innerText = "Add Upcoming Event";
+    eventForm.reset();
+}
+
 function removeEvent(id) {
-    eventsQueue = eventsQueue.filter(e => e.id !== id);
-    updateUI();
+    if(confirm("Remove this event?")) {
+        eventsQueue = eventsQueue.filter(e => e.id !== id);
+        updateUI();
+    }
 }
 
 function updateUI() {
     eventsQueue.sort((a, b) => new Date(a.date) - new Date(b.date));
     eventCount.innerText = eventsQueue.length;
     eventList.innerHTML = '';
+    
     eventsQueue.forEach(ev => {
         const li = document.createElement('li');
         li.className = 'event-item';
         const d = new Date(ev.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        li.innerHTML = `<div class="event-info"><strong>${ev.name} </strong>| ${d} | ${ev.time}</div>
-                        <button class="remove-btn" onclick="removeEvent(${ev.id})">Remove</button>`;
+        
+        li.innerHTML = `
+            <div class="event-info">
+                <strong>${ev.name}</strong><br>
+                <small>${d} | ${ev.time} | ${ev.location}</small>
+            </div>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn" style="padding: 0.4rem; background: #3498db; color: white; width: auto;" onclick="editEvent(${ev.id})">Edit</button>
+                <button class="remove-btn" style="width: auto;" onclick="removeEvent(${ev.id})">Remove</button>
+            </div>`;
         eventList.appendChild(li);
     });
     generateBtn.disabled = eventsQueue.length === 0;
 }
 
+// --- Import / Export ---
+document.getElementById('exportJsonBtn').addEventListener('click', () => {
+    if (eventsQueue.length === 0) return alert("Queue is empty!");
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(eventsQueue));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `MCGI-Events-Backup-${getFormattedDate()}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+});
+
+document.getElementById('importJsonBtn').addEventListener('click', () => document.getElementById('importFile').click());
+
+document.getElementById('importFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const imported = JSON.parse(event.target.result);
+            eventsQueue = imported;
+            updateUI();
+        } catch (err) { alert("Invalid JSON file."); }
+    };
+    reader.readAsText(file);
+});
+
+// --- Generation Logic ---
 generateBtn.addEventListener('click', async () => {
     canvasesContainer.innerHTML = '<h3>Processing Graphics...</h3>';
     canvasPreviewArea.style.display = 'block';
@@ -97,21 +194,17 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     let logo;
     try { logo = await loadImage(logoPath); } catch (e) { console.error("Logo load failed"); }
 
-    // Background
-    ctx.fillStyle = "#F2F4F7";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Header
+    // Header Background
     ctx.fillStyle = "#102A4A"; 
     ctx.fillRect(0, 0, canvas.width, 240); 
     ctx.fillStyle = "#D4AF37"; 
     ctx.fillRect(0, 240, canvas.width, 15);
 
-    // --- Left Side Branding (Vertically Centered to Logo) ---
+    // --- Branding (Vertically Centered) ---
     let brandingX = 80;
     const logoSize = 130;
     const logoY = 55;
-    const logoCenterY = logoY + (logoSize / 2); // 120px
+    const logoCenterY = logoY + (logoSize / 2); // 120
 
     if (logo) {
         ctx.fillStyle = "#FFFFFF";
@@ -125,42 +218,33 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
 
-    // Dynamic Organizer Branding
-    const currentOrganizer = events[0].organizer.toUpperCase();
-    
-    // Row 1: ORGANIZER MCGI YOUTH
+    const currentOrg = events[0].organizer.toUpperCase();
     ctx.fillStyle = "#A8C2E8";
     ctx.font = "bold 65px Arial";
-    ctx.fillText(currentOrganizer, brandingX, logoCenterY - 25);
-    const orgWidth = ctx.measureText(currentOrganizer).width;
-    
+    ctx.fillText(currentOrg, brandingX, logoCenterY - 25);
+    const orgW = ctx.measureText(currentOrg).width;
+
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 65px Arial";
-    // Positioning "MCGI" after the Organizer Name
-    ctx.fillText("MCGI", brandingX + orgWidth + 20, logoCenterY - 25);
-    const mcgiWidth = ctx.measureText("MCGI").width;
-    
-    ctx.fillStyle = "#D4AF37";
-    ctx.fillText("YOUTH", brandingX + orgWidth + mcgiWidth + 40, logoCenterY - 25);
+    ctx.fillText("MCGI", brandingX + orgW + 20, logoCenterY - 25);
+    const mcgiW = ctx.measureText("MCGI").width;
 
-    // Row 2: Ministry Subtitle
+    ctx.fillStyle = "#D4AF37";
+    ctx.fillText("YOUTH", brandingX + orgW + mcgiW + 40, logoCenterY - 25);
+
     ctx.fillStyle = "#A8C2E8";
     ctx.font = "26px Arial";
-    ctx.fillText("MEMBERS CHURCH OF GOD INTERNATIONAL • YOUTH MINISTRY", brandingX, logoCenterY + 35);
+    ctx.fillText("MEMBERS CHURCH OF GOD INTERNATIONAL • YOUTH DEPARTMENT", brandingX, logoCenterY + 35);
 
-    // --- Right Side Header (Vertically Centered to Logo) ---
-    const rightMargin = 1968;
+    // --- Right Header (Centered) ---
     ctx.textAlign = "right";
-    
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 34px Arial";
-    ctx.fillText("UPCOMING EVENTS", rightMargin, logoCenterY - 25);
-    
+    ctx.fillText("UPCOMING EVENTS", 1968, logoCenterY - 25);
     ctx.fillStyle = "#A8C2E8";
     ctx.font = "italic 22px Arial";
-    ctx.fillText(`Generated: ${todayStr}`, rightMargin, logoCenterY + 35);
+    ctx.fillText(`Generated: ${todayStr}`, 1968, logoCenterY + 35);
 
-    // Reset baseline for the rest of the drawing
     ctx.textBaseline = "alphabetic";
 
     // Footer
@@ -169,11 +253,11 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     ctx.fillStyle = "#D4AF37";
     ctx.textAlign = "left";
     ctx.font = "bold 24px Arial";
-    ctx.fillText("Members Church of God International — Youth Ministry", 80, 2018);
+    ctx.fillText("Members Church of God International — Youth Department", 80, 2018);
     ctx.textAlign = "right";
     ctx.fillText(`Page ${pageNum} of ${totalPages}`, 1968, 2018);
 
-    // Layout Logic (Events processing remains the same)
+    // Layout Logic
     const layouts = [
         [],
         [{x: 100, y: 320, w: 1848, h: 750, type: 'wide'}],
@@ -205,28 +289,13 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
             const img = await loadImage(ev.imageStr);
             drawImageProp(ctx, img, box.x, box.y, imgW, imgH);
         } else {
-            const grad = ctx.createLinearGradient(box.x, box.y, box.x + imgW, box.y + imgH);
-            grad.addColorStop(0, '#102A4A');
-            grad.addColorStop(1, '#1d4a82');
-            ctx.fillStyle = grad;
+            ctx.fillStyle = "#102A4A";
             ctx.fillRect(box.x, box.y, imgW, imgH);
             ctx.textAlign = "center";
-            ctx.fillStyle = "rgba(255,255,255,0.2)";
-            ctx.font = "bold 120px Arial";
-            ctx.fillText("📅", box.x + (imgW/2), box.y + (imgH/2) - 20);
             ctx.fillStyle = "#FFFFFF";
-            ctx.font = "bold 32px Arial";
-            const wrappedTitle = ev.name.length > 20 ? ev.name.substring(0, 18) + '...' : ev.name;
-            ctx.fillText(wrappedTitle.toUpperCase(), box.x + (imgW/2), box.y + (imgH/2) + 60);
+            ctx.font = "bold 120px Arial";
+            ctx.fillText("📅", box.x + (imgW/2), box.y + (imgH/2));
         }
-
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#F1F5F9";
-        roundRect(ctx, tx, ty, 180, 50, 25, true);
-        ctx.fillStyle = "#102A4A";
-        ctx.font = "bold 22px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(ev.level.toUpperCase(), tx + 90, ty + 33);
 
         ctx.textAlign = "left";
         ctx.fillStyle = "#102A4A";
@@ -244,36 +313,14 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     canvasesContainer.appendChild(canvas);
 }
 
-function loadImage(src) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.src = src;
-    });
-}
+function loadImage(src) { return new Promise((resolve) => { const img = new Image(); img.onload = () => resolve(img); img.src = src; }); }
 
 function drawImageProp(ctx, img, x, y, w, h) {
     let iw = img.width, ih = img.height, r = Math.min(w / iw, h / ih), nw = iw * r, nh = ih * r, cx, cy, cw, ch, ar = 1;
-    if (nw < w) ar = w / nw;                             
-    if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh; 
+    if (nw < w) ar = w / nw; if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh; 
     nw *= ar; nh *= ar; cw = iw / (nw / w); ch = ih / (nh / h);
     cx = (iw - cw) * 0.5; cy = (ih - ch) * 0.5;
     ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
-}
-
-function roundRect(ctx, x, y, width, height, radius, fill) {
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-    if (fill) ctx.fill();
 }
 
 function exportImages() {
