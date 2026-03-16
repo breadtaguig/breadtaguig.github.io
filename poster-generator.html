@@ -24,8 +24,13 @@
             <h2>Add Upcoming Event</h2>
             <form id="eventForm">
                 <div class="form-group">
+                    <label for="eventOrganizer">Calendar Owner</label>
+                    <input type="text" id="eventOrganizer" required placeholder="e.g. Taguig City">
+                </div>
+
+                <div class="form-group">
                     <label for="eventName">Event Name</label>
-                    <input type="text" id="eventName" required placeholder="e.g. National Thanksgiving Celebration">
+                    <input type="text" id="eventName" required placeholder="e.g. Youth Thanksgiving">
                 </div>
                 
                 <div class="form-row">
@@ -45,8 +50,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="eventOrganizer">Organizer / Coordinator</label>
-                    <input type="text" id="eventOrganizer" required placeholder="e.g. National Youth Coordinator">
+                    <label for="eventAudience">Audience</label>
+                    <input type="text" id="eventAudience" required placeholder="e.g. All MCGI Youth">
                 </div>
 
                 <div class="form-row">

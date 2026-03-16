@@ -30,11 +30,12 @@ eventForm.addEventListener('submit', (e) => {
     const processEntry = (imageData = null) => {
         const newEvent = {
             id: Date.now(),
+            organizer: document.getElementById('eventOrganizer').value,
             name: document.getElementById('eventName').value,
             date: document.getElementById('eventDate').value,
             time: formatAMPM(document.getElementById('eventTime').value), 
             location: document.getElementById('eventLocation').value,
-            organizer: document.getElementById('eventOrganizer').value,
+            audience: document.getElementById('eventAudience').value,
             level: document.getElementById('eventLevel').value,
             imageStr: imageData 
         };
@@ -124,13 +125,23 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
 
-    // Row 1: MCGI YOUTH
+    // Dynamic Organizer Branding
+    const currentOrganizer = events[0].organizer.toUpperCase();
+    
+    // Row 1: ORGANIZER MCGI YOUTH
+    ctx.fillStyle = "#A8C2E8";
+    ctx.font = "bold 65px Arial";
+    ctx.fillText(currentOrganizer, brandingX, logoCenterY - 25);
+    const orgWidth = ctx.measureText(currentOrganizer).width;
+    
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 65px Arial";
-    ctx.fillText("MCGI", brandingX, logoCenterY - 25);
+    // Positioning "MCGI" after the Organizer Name
+    ctx.fillText("MCGI", brandingX + orgWidth + 20, logoCenterY - 25);
     const mcgiWidth = ctx.measureText("MCGI").width;
+    
     ctx.fillStyle = "#D4AF37";
-    ctx.fillText("YOUTH", brandingX + mcgiWidth + 20, logoCenterY - 25);
+    ctx.fillText("YOUTH", brandingX + orgWidth + mcgiWidth + 40, logoCenterY - 25);
 
     // Row 2: Ministry Subtitle
     ctx.fillStyle = "#A8C2E8";
@@ -162,7 +173,7 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
     ctx.textAlign = "right";
     ctx.fillText(`Page ${pageNum} of ${totalPages}`, 1968, 2018);
 
-    // Layout Logic
+    // Layout Logic (Events processing remains the same)
     const layouts = [
         [],
         [{x: 100, y: 320, w: 1848, h: 750, type: 'wide'}],
@@ -227,7 +238,7 @@ async function generateCanvasPage(events, pageNum, totalPages, todayStr) {
         ctx.fillText(`📍 ${ev.location}`, tx, ty + 220);
         ctx.fillStyle = "#D4AF37";
         ctx.font = "bold 26px Arial";
-        ctx.fillText(`👤 ${ev.organizer}`, tx, ty + 275);
+        ctx.fillText(`👤 ${ev.audience}`, tx, ty + 275);
     }
     canvas.className = 'generated-canvas';
     canvasesContainer.appendChild(canvas);
